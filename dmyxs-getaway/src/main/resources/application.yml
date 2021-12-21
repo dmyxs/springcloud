@@ -1,0 +1,44 @@
+server:
+  port: 9999
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    nacos:
+      server-addr: localhost:8848
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      # 路由规则
+      routes:
+        # admin route
+        - id: admins_route
+          uri: lb://API-ADMINS #lb://API-ADMINS负载均衡路由转发
+          predicates:
+            - Path=/admins/demos
+          filters:
+            # 去掉前缀，1=去掉1层
+            - StripPrefix=1
+        # category route
+        - id: categorys_route
+          uri: lb://API-CATEGORYS
+          predicates:
+            - Path=/categorys/demos
+          filters:
+            - StripPrefix=1
+        # user route
+        - id: users_route
+          uri: lb://API-USERS
+          predicates:
+            - Path=/users/demos
+          filters:
+            - StripPrefix=1
+        # video route
+        - id: videos_route
+          uri: lb://API-VIDEOS
+          predicates:
+            - Path=/videos/demos
+          filters:
+            - StripPrefix=1
